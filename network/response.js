@@ -1,10 +1,9 @@
 exports.success = (res, message, status) => {
   const statusCode = status || 200;
-  const statusMessage = message || 'Ok';
   res.status(statusCode).send({
     error: false,
     status: statusCode,
-    body: statusMessage
+    body: message
   });
 }
 

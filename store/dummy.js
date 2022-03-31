@@ -1,30 +1,41 @@
 const db = {
-  user: []
+  user: [],
+  auth: []
 };
 
-const list = (table) => {
+const list = async(table) => {
   return db[table]
 };
 
-const get = (table, id) => {
-  return list(table).find(item => item.id === id) || null;
+const get = async(table, id) => {
+  return (await list(table)).find(item => item.id === id) || null;
 };
 
-const insert = (table, data) => {
-  list(table).push(data)
+const insert = async(table, data) => {
+  (await list(table)).push(data)
+  return data;
 };
 
-const remove = (table, id) => {
-  const collection = list(table);
+const remove = async(table, id) => {
+  const collection = await list(table);
   const index = collection.findIndex(item => item.id === id);
   if (index === -1) { return false }
   collection.splice(index, 1);
   return true;
 };
 
+const update = async(table, data) => {
+  const collection = await list(table);
+  const index = collection.findIndex(item => item.id === data.id);
+  if (index === -1) { return null }
+  collection[index] = data;
+  return data;
+};
+
 module.exports = {
   list,
   get,
   insert,
-  remove
+  remove,
+  update
 }
