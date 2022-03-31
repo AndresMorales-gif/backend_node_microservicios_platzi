@@ -20,7 +20,6 @@ const controller = (injectdStore) => {
     if (userOld.length > 0) {
       throw new Error(ERROR_USER_DUPLICATE);
     }
-    console.log(auth);
     let user = {
       id: nanoid.nanoid(),
       name: body.name,

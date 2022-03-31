@@ -127,6 +127,35 @@
           }
         }
       }
+    },
+    "/login" : {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "summary": "Login",
+        "description": "Iniciar sesion",
+        "operationId": "validarLogin",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Login",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Operación exitosa"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -146,6 +175,20 @@
         "name": {
           "type": "string"
         },
+        "lastname": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
         "username": {
           "type": "string"
         },
