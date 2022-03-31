@@ -32,10 +32,24 @@ const update = async(table, data) => {
   return data;
 };
 
+const query = async(table, q) => {
+  const collection = await list(table);
+  const keys = Object.keys(q);
+  return collection.filter(item => {
+    for (const key of keys) {
+      if (q[key] !== item[key]) {
+        return false;
+      }
+    }
+    return true;
+  })
+}
+
 module.exports = {
   list,
   get,
   insert,
   remove,
-  update
+  update,
+  query
 }
