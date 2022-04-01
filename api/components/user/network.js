@@ -1,29 +1,30 @@
 const express = require('express');
 
-const response = require('../../../network/response')
+const secure = require('./secure');
 const controller = require('./index');
+const response = require('../../../network/response');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   controller.list()
     .then(list => response.success(res, list, 200))
-    .catch(error => response.error(res, error.message, 500));
+    .catch(next);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
   controller.get(req.params.id)
     .then(user => response.success(res, user, 200))
-    .catch(error => response.error(res, error.message, 500));
+    .catch(next);
 });
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   controller.insert(req.body)
     .then((user) => response.success(res, user, 200))
-    .catch(error => response.error(res, error.message, 500));
+    .catch(next);
 });
 
-router.put('/', (req, res) => {
+router.put('/', secure('update'), (req, res, next) => {
   controller.update(req.body)
     .then((user) => {
       if (user) {
@@ -32,10 +33,10 @@ router.put('/', (req, res) => {
         response.error(res, 'Error', 400);
       }
     })
-    .catch(error => response.error(res, error.message, 500));
+    .catch(next);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
   controller.remove(req.params.id)
     .then((isSuccess) => {
       if (isSuccess) {
@@ -44,7 +45,7 @@ router.delete('/:id', (req, res) => {
         response.error(res, 'Error', 400);
       }
     })
-    .catch(error => response.error(res, error.message, 500));
+    .catch(next);
 });
 
 module.exports = router;

@@ -2,12 +2,14 @@ const bcrypt = require('bcrypt')
 const nanoid = require('nanoid');
 
 const auth = require('../../../auth');
+const error = require('../../../utils/error');
 
 const TABLE = 'auth';
 const TABLE_USER = 'user';
+const ERROR_CREDENTIALS = 'Invalid information';
 
 const controller = (injectdStore) => {
-  const store = injectdStore || require('../../../store/dummy');
+  const store = injectdStore || require('../../../store/mysql');
 
   const getUsername = (username) => store.query(TABLE_USER, { username: username });
 
@@ -15,16 +17,17 @@ const controller = (injectdStore) => {
     return store.query(TABLE, { username: username })
       .then((data) => {
         if (data.length === 0) {
-          throw new Error('Error')
+          throw error(ERROR_CREDENTIALS)
         }
         return bcrypt.compare(password, data[0].password)
       }).then((isEquals) => {
         if (isEquals) {
           return getUsername(username);
         } else {
-          throw new Error('Error');
+          throw error(ERROR_CREDENTIALS);
         }
       }).then((user) => {
+        console.log(user);
         return auth.sign(user[0]);
       });
 
@@ -33,7 +36,9 @@ const controller = (injectdStore) => {
   const insert = async (body) => store.insert(TABLE, { username: body.username, password: await bcrypt.hash(body.password, 5), id: nanoid.nanoid() });
 
   const update = async (body) => {
+    console.log(body);
     const data = await store.query(TABLE, { username: body.username });
+    console.log(data);
     return store.update(TABLE, {
       id: data[0].id,
       username: body.username || data[0].username,

@@ -1,13 +1,14 @@
 const nanoid = require('nanoid');
 
 const auth = require('../auth')
+const error = require('../../../utils/error');
 
 const TABLE = 'user';
 const ERROR_USER_DUPLICATE = 'User already exists';
 const USER_NOT_EXIST = 'User does not exist'
 
 const controller = (injectdStore) => {
-  const store = injectdStore || require('../../../store/dummy');
+  const store = injectdStore || require('../../../store/mysql');
 
   const list = () => store.list(TABLE);
 
@@ -18,7 +19,7 @@ const controller = (injectdStore) => {
   const insert = async (body) => {
     const userOld = await store.query(TABLE, {username: body.username});
     if (userOld.length > 0) {
-      throw new Error(ERROR_USER_DUPLICATE);
+      throw error(ERROR_USER_DUPLICATE, 400);
     }
     let user = {
       id: nanoid.nanoid(),
@@ -40,8 +41,9 @@ const controller = (injectdStore) => {
     const user = await store.get(TABLE, body.id);
     
     if (!user) {
-      throw new Error(USER_NOT_EXIST)
+      throw error(USER_NOT_EXIST, 400)
     }
+    console.log(user);
 
     if (body.password) {
       await auth.update({
@@ -55,7 +57,7 @@ const controller = (injectdStore) => {
       id: body.id,
       name: body.name || user.name,
       lastname: body.lastname || user.lastname,
-      username: body.username
+      username: user.username
     })
   };
 
