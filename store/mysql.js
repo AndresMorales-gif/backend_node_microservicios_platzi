@@ -69,7 +69,7 @@ const insert = (table, data) => {
 
 const remove = async (table, id) => {
   return new Promise((resolve, reject) => {
-    connection.query(`DELETE ${table} WHERE id=${id}`, (err, result) => {
+    connection.query(`DELETE FROM ${table} WHERE id = '${id}'`, (err, result) => {
       if (err) {
         return reject(err);
       }
@@ -89,9 +89,14 @@ const update = (table, data) => {
   });
 };
 
-const query = (table, q) => {
+const query = (table, q, join) => {
   return new Promise((resolve, reject) => {
-    connection.query(`SELECT * FROM ${table} WHERE ?`, q, (err, data) => {
+    let joinQ = '';
+    if (join) {
+      joinQ = `JOIN ${join.table} ON ${table}.${join.value} = ${join.table}.id`;
+    }
+
+    connection.query(`SELECT * FROM ${table} ${joinQ} WHERE ?`, q, (err, data) => {
       if (err) {
         return reject(err);
       }

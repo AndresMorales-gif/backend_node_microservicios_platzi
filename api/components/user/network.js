@@ -6,6 +6,28 @@ const response = require('../../../network/response');
 
 const router = express.Router();
 
+router.get('/:id/followers', (req, res, next) => {
+  controller.followers(req.params.id)
+    .then(data => {
+      response.success(res, data, 200);
+    })
+    .catch(next);
+});
+
+router.get('/:id/following',  (req, res, next) => {
+  controller.following(req.params.id)
+    .then(data => response.success(res, data, 200))
+    .catch(next);
+});
+
+router.post('/follow/:id', secure('follow'),(req, res, next) => {
+  controller.follow(req.user.id, req.params.id)
+    .then(data => {
+      response.success(res, data, 201);
+    })
+    .catch(next);
+});
+
 router.get('/', (req, res, next) => {
   controller.list()
     .then(list => response.success(res, list, 200))
@@ -20,7 +42,7 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   controller.insert(req.body)
-    .then((user) => response.success(res, user, 200))
+    .then((user) => response.success(res, user, 201))
     .catch(next);
 });
 

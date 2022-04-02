@@ -4,6 +4,7 @@ const auth = require('../auth')
 const error = require('../../../utils/error');
 
 const TABLE = 'user';
+const TABLE_FOLLOW = 'user_follow';
 const ERROR_USER_DUPLICATE = 'User already exists';
 const USER_NOT_EXIST = 'User does not exist'
 
@@ -14,10 +15,10 @@ const controller = (injectdStore) => {
 
   const get = (id) => store.get(TABLE, id);
 
-  
+
 
   const insert = async (body) => {
-    const userOld = await store.query(TABLE, {username: body.username});
+    const userOld = await store.query(TABLE, { username: body.username });
     if (userOld.length > 0) {
       throw error(ERROR_USER_DUPLICATE, 400);
     }
@@ -39,7 +40,7 @@ const controller = (injectdStore) => {
 
   const update = async (body) => {
     const user = await store.get(TABLE, body.id);
-    
+
     if (!user) {
       throw error(USER_NOT_EXIST, 400)
     }
@@ -61,12 +62,24 @@ const controller = (injectdStore) => {
     })
   };
 
+  const follow = (from, to) => store.insert(TABLE_FOLLOW,
+    { user_from: from, user_to: to });
+
+  const followers = (to) => store.query(TABLE_FOLLOW,
+    { user_to: to }, { table: TABLE, value: 'user_from' });
+
+  const following = (from) => store.query(TABLE_FOLLOW,
+    { user_from: from }, { table: TABLE, value: 'user_to' });
+
   return {
     list,
     get,
     insert,
     remove,
     update,
+    follow,
+    followers,
+    following
   }
 };
 

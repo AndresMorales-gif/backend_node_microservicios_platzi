@@ -31,7 +31,7 @@ const decodeHeader = (req) => {
   const authorization = req.headers.authorization || '';
   const token = getToken(authorization);
   const decode = verify(token);
-
+  req.user = decode;
   return decode;  
 };
 
@@ -41,6 +41,9 @@ const check = {
     if (decoded.id !== owner) {
       throw error(NOT_PERMISSION, 401)
     }
+  },
+  logged: (req) => {
+    decodeHeader(req);
   }
 }
 
