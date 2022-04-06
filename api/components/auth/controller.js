@@ -9,7 +9,7 @@ const TABLE_USER = 'user';
 const ERROR_CREDENTIALS = 'Invalid information';
 
 const controller = (injectdStore) => {
-  const store = injectdStore || require('../../../store/mysql');
+  const store = injectdStore;
 
   const getUsername = (username) => store.query(TABLE_USER, { username: username });
 
@@ -27,7 +27,6 @@ const controller = (injectdStore) => {
           throw error(ERROR_CREDENTIALS);
         }
       }).then((user) => {
-        console.log(user);
         return auth.sign(user[0]);
       });
 
@@ -36,9 +35,7 @@ const controller = (injectdStore) => {
   const insert = async (body) => store.insert(TABLE, { username: body.username, password: await bcrypt.hash(body.password, 5), id: nanoid.nanoid() });
 
   const update = async (body) => {
-    console.log(body);
     const data = await store.query(TABLE, { username: body.username });
-    console.log(data);
     return store.update(TABLE, {
       id: data[0].id,
       username: body.username || data[0].username,

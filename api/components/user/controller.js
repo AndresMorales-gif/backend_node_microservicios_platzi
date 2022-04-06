@@ -9,13 +9,11 @@ const ERROR_USER_DUPLICATE = 'User already exists';
 const USER_NOT_EXIST = 'User does not exist'
 
 const controller = (injectdStore) => {
-  const store = injectdStore || require('../../../store/mysql');
+  const store = injectdStore;
 
   const list = () => store.list(TABLE);
 
   const get = (id) => store.get(TABLE, id);
-
-
 
   const insert = async (body) => {
     const userOld = await store.query(TABLE, { username: body.username });
@@ -44,7 +42,6 @@ const controller = (injectdStore) => {
     if (!user) {
       throw error(USER_NOT_EXIST, 400)
     }
-    console.log(user);
 
     if (body.password) {
       await auth.update({

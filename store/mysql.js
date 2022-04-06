@@ -106,10 +106,10 @@ const query = (table, q, join) => {
 };
 
 module.exports = {
-      list,
-      get,
-      insert,
-      remove,
-      update,
-      query
-    }
+  list,
+  get,
+  insert,
+  remove,
+  update,
+  query
+}

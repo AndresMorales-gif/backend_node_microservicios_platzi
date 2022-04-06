@@ -6,7 +6,7 @@ const TABLE = 'post';
 const ACTION_NOT_ALLOWED = 'No tienes permiso para hacer esto.'
 
 const controller = (injectdStore) => {
-  const store = injectdStore || require('../../../store/mysql');
+  const store = injectdStore;
 
   const list = () => store.list(TABLE);
 
