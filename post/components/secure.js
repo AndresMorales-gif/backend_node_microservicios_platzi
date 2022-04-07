@@ -1,4 +1,4 @@
-const auth = require('../../../auth')
+const auth = require('../../auth')
 
 const checkAuth = (action) => {
   const middleware = (req, res, next) => {

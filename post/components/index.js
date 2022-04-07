@@ -1,4 +1,4 @@
-const store = require('../../../store/remote-mysql');
+const store = require('../../store/remote-mysql');
 
 const controller = require('./controller');
 

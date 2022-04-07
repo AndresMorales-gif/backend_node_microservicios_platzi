@@ -1,6 +1,6 @@
 const nanoid = require('nanoid');
 
-const error = require('../../../utils/error');
+const error = require('../../utils/error');
 
 const TABLE = 'post';
 const ACTION_NOT_ALLOWED = 'No tienes permiso para hacer esto.'
