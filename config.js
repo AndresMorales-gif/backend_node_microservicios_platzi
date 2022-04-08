@@ -21,5 +21,13 @@ module.exports = {
   postService: {
     port: process.env.POST_SERVICE_PORT || 3002,
     host: process.env.POST_SERVICE_HOST || 'http://localhost'
+  },
+  cacheService: {
+    port: process.env.CACHE_SERVICE_PORT || 3003,
+    host: process.env.CACHE_SERVICE_HOST || 'http://localhost',
+    redisHost: process.env.HOST_REDIS,
+    redisPort: process.env.PORT_REDIS,
+    redisDB: process.env.DB_REDIS,
+    redisPass: process.env.PASS_REDIS,
   }
 }

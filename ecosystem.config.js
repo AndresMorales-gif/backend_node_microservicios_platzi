@@ -11,6 +11,11 @@ module.exports = {
       watch: true,
     },
     {
+      name: 'API-REDIS',
+      script: 'cache/index.js',
+      watch: true,
+    },
+    {
       name: 'API-POST',
       script: 'post/index.js',
       watch: true,

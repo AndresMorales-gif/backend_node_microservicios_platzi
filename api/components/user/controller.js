@@ -8,12 +8,27 @@ const TABLE_FOLLOW = 'user_follow';
 const ERROR_USER_DUPLICATE = 'User already exists';
 const USER_NOT_EXIST = 'User does not exist'
 
-const controller = (injectdStore) => {
+const controller = (injectdStore, injetedCache) => {
   const store = injectdStore;
+  const cache = injetedCache;
 
-  const list = () => store.list(TABLE);
+  const list = async () => {
+    let users = await cache.list(TABLE);
+    if (!users) {
+      users = await store.list(TABLE);
+      cache.insert(TABLE, users)
+    }
+    return users;
+  };
 
-  const get = (id) => store.get(TABLE, id);
+  const get = async (id) => {
+    let user = await cache.get(TABLE, id);
+    if (!user) {
+      user = await store.get(TABLE, id);
+      cache.insert(TABLE, user)
+    }
+    return user;
+  };
 
   const insert = async (body) => {
     const userOld = await store.query(TABLE, { username: body.username });
